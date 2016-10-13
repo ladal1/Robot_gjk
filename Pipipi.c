@@ -9,40 +9,15 @@
 int nMotorSpeedSetting = 30;
 float nPfactor = 0.3;
 int grey = 50;
-int lowest = 100;
-int highest = 0;
-
-void scanLine()
-{
-  motor[leftwheel] = 10;
-  motor[rightwheel] = -10;
-
-  time1[T1] = 0;
-  while(time1[T1] < 500)
-  {
-    if (SensorValue[colour] > highest)
-    {
-      highest = SensorValue[colour];
-    }
-    if (SensorValue[colour] < lowest)
-    {
-      lowest = SensorValue[colour];
-    }
-  }
-  grey = (highest - lowest) / 2;
-  motor[leftwheel] = 0;
-  motor[rightwheel] = 0;
-}
 
 task main()
 {
   float error;
-  scanLine();
   while (true)
   {
-    error = SensorValue[colour] - grey;
-    motor[leftwheel] = nMotorSpeedSetting - round(error * nPfactor);
-    motor[rightwheel] = nMotorSpeedSetting + round(error * nPfactor);
+    error = getColorReflected(Colour) - grey;
+    setMotorSpeed(LeftM, nMotorSpeedSetting - round(error * nPfactor));
+    setMotorSpeed(RightM, nMotorSpeedSetting + round(error * nPfactor));
     wait1Msec(50);
   }
 }
