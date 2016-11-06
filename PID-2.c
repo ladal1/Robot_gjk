@@ -11,7 +11,7 @@ task main()
 	/*
 	startTask(gyroReset);
 	int CnMotorSpeed = 10;
-	float CkP = 10;
+	float CkP   = 10;
 	float CkI = 0.0;
 	float CkD = 0.0;
 	float ClastError = 0;
@@ -61,7 +61,7 @@ task main()
 			//Couvnout
 			setMotorSpeed(RightM, nSpeedTurn);
 			setMotorSpeed(LeftM, nSpeedTurn);
-			wait1Msec(300);
+			wait1Msec(250);
 			setMotorSpeed(RightM, 0);
 			setMotorSpeed(LeftM, 0);
 			wait1Msec(100);
@@ -70,7 +70,7 @@ task main()
 			if(USD < 20.0){
 				setMotorSpeed(RightM, nSpeedTurn);
 				setMotorSpeed(LeftM, nSpeedTurnNeg);
-				wait1Msec(275);
+				wait1Msec(400);
 				setMotorSpeed(RightM, 0);
 				setMotorSpeed(LeftM, 0);
 				wait1Msec(100);
