@@ -11,12 +11,13 @@ task main()
 	setMotorBrakeMode(LeftM,motorBrake);
 	setMotorBrakeMode(RightM,motorBrake);
 
+	//Potreba kalibrovat
 	int speed = 70;
 	int speedTurn = 70;
 	int speedTurnNeg = -70;
 	int waitTurn = 315;
 	int speedBack = -50;
-	int waitBack = 300;
+	int waitBack = 380;
 	int waitFwd = 850;
 	float USD = 20.0;
 

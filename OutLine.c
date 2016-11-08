@@ -33,6 +33,5 @@ task main()
 		setMotorSpeed(LeftM, MotorSpeed+correction);
 		setMotorSpeed(RightM, MotorSpeed-correction+10);
 		lastError = error;
-		//continue
 	}
 }
