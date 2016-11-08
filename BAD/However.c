@@ -9,6 +9,27 @@
 task main()
 {
 	/*
+			//Constants
+	Cerror = 0;
+	Cderivative = 0;
+	Ccorrection = 0;
+	CcorrectionP = 0;
+	CcorrectionD = 0;
+	while(true){
+	Cerror = Cmidpoint - getColorReflected(Colour);
+	Cderivative = Cerror - ClastError;
+	Cintegral = Cintegral + Cerror;
+	CcorrectionP = CkP*Cerror;
+	CcorrectionI = CkI*Cintegral;
+	CcorrectionD = CkD*Cderivative;
+	Ccorrection = round(CcorrectionP + CcorrectionI +CcorrectionD);
+	setMotorSpeed(LeftM, CnMotorSpeed+Ccorrection);
+	setMotorSpeed(RightM, CnMotorSpeed-Ccorrection);
+	ClastError = Cerror;
+	delay(1);
+		}
+
+			//Line follower
 	startTask(gyroReset);
 	int CnMotorSpeed = 10;
 	float CkP   = 10;
@@ -23,7 +44,6 @@ task main()
 	float CcorrectionP = 0;
 	float CcorrectionI = 0;
 	float CcorrectionD = 0;
-
 	while(true){
 	Cerror = Cmidpoint - getColorReflected(Colour);
 	Cderivative = Cerror - ClastError;
@@ -47,94 +67,108 @@ task main()
 	}
 	*/
 
+
+		//Maze solver
 	setMotorBrakeMode(LeftM,motorBrake);
   setMotorBrakeMode(RightM,motorBrake);
-
-	//Potreba kalibrovat
-	int nSpeed = 50;
-	int nSpeedTurn = -50;
-	int nSpeedTurnNeg = 50;
+	//Constants
+	int nSpeed = 85;
+	int nSpeedTurn = -85;
+	int nSpeedTurnNeg = 85;
 	float USD = 0.0;
+	int TurnMs = 293;
+	int OneCellMs = 1200;
 
-	while(true){
-		if (getTouchValue(Touch)){
+
+while(true)
+		{
+		//If the button on
+		if (getTouchValue(Touch))
+			{
+		//Vyrovnat se 100ms
 			setMotorSpeed(LeftM, 100);
 			setMotorSpeed(RightM, 100);
 			wait1Msec(100);
-			//Couvnout
+
+			//Couvnout 250 ms
 			setMotorSpeed(RightM, nSpeedTurn);
 			setMotorSpeed(LeftM, nSpeedTurn);
 			wait1Msec(250);
-			setMotorSpeed(RightM, 0);
-			setMotorSpeed(LeftM, 0);
-			wait1Msec(100);
+		//Zjistit zda je misto vlevo using Ultrasonic
 			USD = getUSDistance(Ultrasonic);
-			//Otocit
-			if(USD < 17.0){
+
+		//Otocit vpravo je-li vzdalenost mensi, nez 20 cm
+			if(USD < 26.0){
 				setMotorSpeed(RightM, nSpeedTurn);
 				setMotorSpeed(LeftM, nSpeedTurnNeg);
-				wait1Msec(450);
-				setMotorSpeed(RightM, 0);
-				setMotorSpeed(LeftM, 0);
-				wait1Msec(100);
+				wait1Msec(TurnMs);
 			}
-			else{
+
+			else
+				{
+		//Otocit vlevo je-li vlevo misto
 				setMotorSpeed(RightM, nSpeedTurnNeg);
 				setMotorSpeed(LeftM, nSpeedTurn);
-				wait1Msec(300);
-				setMotorSpeed(RightM, 0);
-				setMotorSpeed(LeftM, 0);
-				wait1Msec(100);
+				wait1Msec(TurnMs);
+		//Jet takhle 1 ctverec
 				setMotorSpeed(RightM, nSpeed);
 				setMotorSpeed(LeftM, nSpeed);
-				wait1Msec(920);
+				wait1Msec(OneCellMs);
+				}
+		}
 
-			}
-		}
-		setMotorSpeed(RightM, nSpeed);
-		setMotorSpeed(LeftM, nSpeed);
-		/*
+
+	//Neni-li tlacitko zmackle, merime vzdalenost Ultrasonikem
 		USD = getUSDistance(Ultrasonic);
-		if(USD < 6.5){
-			setMotorSpeed(RightM, nSpeed);
-			setMotorSpeed(LeftM, nSpeed - 10);
-			wait1Msec(20);
-		}
-		if(USD > 6.5 && USD < 20.0){
-			//jed rovni
+
+		//Je-li vzdalenost mensi nez 4-trochu tocime doprava a pak se vyrovnavame
+		if(USD < 4.0)
+			{
+			//vyravnivanie
+      setMotorSpeed(RightM, 0);
+			setMotorSpeed(LeftM, 85);
+			wait1Msec(25);
+			setMotorSpeed(RightM, 85);
+			setMotorSpeed(LeftM, 0);
+			wait1Msec(19.7);
+			}
+
+		//Je-li vzdalenost mezi 4 az 8, jedeme rovne
+		if(USD > 4.0 && USD < 8.0)
+			{
+			//jed rovne
 			setMotorSpeed(RightM, nSpeed);
 			setMotorSpeed(LeftM, nSpeed);
 			wait1Msec(20);
-		}
-		if(USD > 20.0){
-			//Toc doleva
+			}
+
+		//Je-li vzdalenost mezi 8 za 26 tocime doleva a pak se vyrovnavame
+		if(USD > 8.0 && USD < 26.0)
+			{
+			//vyravnivanie
+			setMotorSpeed(RightM, 85);
+			setMotorSpeed(LeftM, 0);
+			wait1Msec(25);
+			setMotorSpeed(RightM, 0);
+			setMotorSpeed(LeftM, 85);
+			wait1Msec(18);
+			}
+
+	//Je-li vzdalenost vetsi nez 26, tocime doleva 90 stupnu
+		if(USD > 26.0)
+			{
+			//Projed jeste trosicku rovne
+		  setMotorSpeed(RightM, nSpeed);
+			setMotorSpeed(LeftM, nSpeed);
+			wait1Msec(20);
+			//Toc doleva 90 stupnu
 			setMotorSpeed(RightM, nSpeedTurnNeg);
 			setMotorSpeed(LeftM, nSpeedTurn);
-			wait1Msec(275);
+			wait1Msec(TurnMs);
+			//Projed jeden cetverec
 			setMotorSpeed(RightM, nSpeed);
 			setMotorSpeed(LeftM, nSpeed);
-			wait1Msec(920);
+			wait1Msec(OneCellMs);
+			}
 		}
-
-		Cerror = 0;
-		Cderivative = 0;
-		Ccorrection = 0;
-		CcorrectionP = 0;
-		CcorrectionD = 0;
-
-		while(true){
-		Cerror = Cmidpoint - getColorReflected(Colour);
-		Cderivative = Cerror - ClastError;
-		Cintegral = Cintegral + Cerror;
-		CcorrectionP = CkP*Cerror;
-		CcorrectionI = CkI*Cintegral;
-		CcorrectionD = CkD*Cderivative;
-		Ccorrection = round(CcorrectionP + CcorrectionI +CcorrectionD);
-		setMotorSpeed(LeftM, CnMotorSpeed+Ccorrection);
-		setMotorSpeed(RightM, CnMotorSpeed-Ccorrection);
-		ClastError = Cerror;
-		delay(1);
-		}
-		*/
 	}
-}

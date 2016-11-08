@@ -47,9 +47,6 @@ task main()
 	}
 	*/
 
-	setMotorBrakeMode(LeftM,motorBrake);
-  setMotorBrakeMode(RightM,motorBrake);
-
 	//Potreba kalibrovat
 	int nSpeed = 50;
 	int nSpeedTurn = -50;
