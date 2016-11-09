@@ -8,10 +8,10 @@
 
 task main()
 {
-	int MotorSpeed = 50;
-	float kP = 1.55;
-	float kI = 0.0;
-	float kD = 0.0;
+	int MotorSpeed = 70;
+	float kP = 3.2;
+	float kI = 0.00001;
+	float kD = 190;
 	float lastError = 0;
 	int midpoint = 40;
 	float error = 0;
